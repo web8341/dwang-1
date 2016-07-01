@@ -1,3 +1,3 @@
 # dwang
-My projects
-Collections fo my own projects
+My projects - 
+Collections of my own projects

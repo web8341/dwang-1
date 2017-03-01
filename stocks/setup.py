@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-#import scipy
+import scipy
 from datetime import datetime
 import time
 import psycopg2

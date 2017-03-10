@@ -1,0 +1,26 @@
+Data flow Tuning and Optimization
+Limiting Rows at the Database
+When you pull data into an SSIS data flow, especially from a SQL Server database (or other relational DBMS), you can increase your ETL processing speed by simply limiting the number of rows retrieved. On a SQL Server database or other RDBMS, this is done by adding a WHERE clause to your SELECT queries.
+Performing Joins in the Database
+Performing Joins in the Database to efficiently limit the number of the rows at the server
+Sorting in the Database
+Some of the data flow components—such as the Merge Join transformation—require sorted input. The Sort transformation in SSIS is a fully blocking component, meaning no rows can pass it until it has completed processing its entire input data set. SSIS has a single method of sorting data, whereas SQL Server has multiple strategies for fulfilling sort requests—the database can take advantage of indexes, for instance. Sorting at the database simply requires the addition of the ORDER BY clause to your SELECT query. When combined with joins and WHERE clause restrictions, sorting input at the database can significantly increase performance.
+Performing Complex Preprocessing at the Database
+You might need to do some server-based calculations, joins, or other steps on your data that might be done more efficiently in a set-based fashion. This is especially true of processing that requires you to serialize intermediate result sets during preprocessing (for example, pushing data into temp tables), grouping with the SQL GROUP BY clause, and partitioning data (with the SQL OVER clause). Because SQL Server can apply a number of different strategies to set-based processing problems while SSIS has essentially a single, simple row-by-row strategy for solving them, performing set-based processing tasks at the database is often more efficient.
+Ensuring Security and “Read Auditing”
+In some very highly secure operations, it may be a requirement to audit “read” operations against sensitive data. In these cases, it might make sense to require users and ETL processes to call stored procedures to read from critical tables. By using stored procedures as a source, you can deny direct access to tables and incorporate logic into the procedures to record all read requests being sent by users and processes.
+Pulling Too Many Columns
+In many cases, SSIS developers choose to do a good old-fashioned SELECT * query or choose the Data Access mode Table or View option on the OLE DB Source Editor. forces SSIS to read it into the data flow even though it’s going to be discarded later—a potentially costly waste of resources.
+Using Execution Trees
+Whenever you execute an SSIS package, it generates an execution tree behind the scenes. The execution tree is used to optimize performance and to build an execution plan for your package. 
+Implementing Parallelism
+On multiprocessor servers, one of the biggest performance benefits you can implement is parallelism. Within a package, you can implement multiple data flows that execute in parallel, or even multiple data flow paths within the same Data Flow task. To get the most out of parallel execution, you have to plan around the resource limitations of your server.
+The MaxConcurrentExecutables package setting specifies the maximum number of threads SSIS will execute in parallel in the package. 
+Summary
+This chapter has introduced several tools and methods for optimizing your SSIS packages. Many of these optimizations rely on performing operations at the source when possible and limiting the data pulled through the ETL process. This chapter also covered SSIS execution trees and some of the keys to optimizing performance through parallelism.
+
+
+
+
+
+
